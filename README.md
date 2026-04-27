@@ -34,3 +34,5 @@ After evaluate.py is run, copy `best_model.joblib`, `scaler.joblib`, `best_model
 ## Local dev environment test
 build ml_pipeline and stargazer using the Dockerfile in their respective folder and then start docker compose.
 The best model need to be manually copied to `github-star-predictor/app/model`.
+
+## Result
