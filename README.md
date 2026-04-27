@@ -36,3 +36,4 @@ build ml_pipeline and stargazer using the Dockerfile in their respective folder 
 The best model need to be manually copied to `github-star-predictor/app/model`.
 
 ## Result
+<img width="1281" height="846" alt="image" src="https://github.com/user-attachments/assets/52b84d94-b24d-4bca-acb6-89b75738c653" />
