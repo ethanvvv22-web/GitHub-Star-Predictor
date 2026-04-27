@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/instance: kubernetes-dashboard
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kong
+    app.kubernetes.io/version: "3.8"
+    enable-metrics: "true"
+    helm.sh/chart: kong-2.46.0
+  name: kubernetes-dashboard-kong-proxy-expose
+  namespace: kubernetes-dashboard
+  resourceVersion: "25453"
+spec:
+  type: NodePort
+  ports:
+  - name: kong-proxy
+    port: 80
+    protocol: TCP
+    targetPort: 8000
+    nodePort: 30900
+  - name: kong-proxy-tls
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+    nodePort: 30901
+  selector:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: kubernetes-dashboard
+    app.kubernetes.io/name: kong
+  sessionAffinity: None

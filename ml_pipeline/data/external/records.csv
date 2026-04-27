@@ -1,0 +1,25 @@
+user_id,action,timestamp,details
+user_001,login,2026-04-20 09:15:23,Successful login from mobile app
+user_001,search,2026-04-20 09:16:45,Searched for vacuum troubleshooting
+user_001,view_article,2026-04-20 09:17:12,Read article: How to clean filters
+user_001,ask_question,2026-04-20 09:20:33,Asked about battery replacement
+user_001,logout,2026-04-20 09:45:18,Session ended
+user_001,login,2026-04-21 14:22:10,Successful login from web
+user_001,search,2026-04-21 14:23:55,Searched for warranty information
+user_001,download,2026-04-21 14:25:40,Downloaded user manual PDF
+user_001,logout,2026-04-21 14:30:00,Session ended
+user_001,login,2026-04-22 18:05:33,Successful login from mobile app
+user_001,ask_question,2026-04-22 18:06:20,Asked about noise issues
+user_001,view_article,2026-04-22 18:08:15,Read article: Troubleshooting unusual sounds
+user_001,rate_service,2026-04-22 18:12:00,Rated support: 5 stars
+user_001,logout,2026-04-22 18:15:45,Session ended
+user_001,login,2026-04-23 10:30:15,Successful login from mobile app
+user_001,search,2026-04-23 10:31:20,Searched for replacement parts
+user_001,view_product,2026-04-23 10:32:45,Viewed HEPA filter product page
+user_001,add_to_cart,2026-04-23 10:33:30,Added filter to shopping cart
+user_001,checkout,2026-04-23 10:35:00,Completed purchase
+user_001,logout,2026-04-23 10:36:15,Session ended
+user_001,login,2026-04-24 16:45:22,Successful login from web
+user_001,check_order,2026-04-24 16:46:10,Checked order status
+user_001,track_shipment,2026-04-24 16:47:05,Tracked package delivery
+user_001,logout,2026-04-24 16:50:30,Session ended

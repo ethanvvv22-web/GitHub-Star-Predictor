@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stargazer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stargazer
+  template:
+    metadata:
+      labels:
+        app: stargazer
+    spec:
+      containers:
+      - name: stargazer
+        image: hamza7sallam/stargazer:latest  # <- use the actual pushed image
+        ports:
+        - containerPort: 8000

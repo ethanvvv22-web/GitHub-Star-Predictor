@@ -1,0 +1,82 @@
+name: kubernetes connection test
+
+on: [push]
+
+jobs:
+  train:
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: build ml_pipeline docker image
+      run: sudo docker build . -t ml_pipeline:v0
+      working-directory: ./ml_pipeline
+
+    - name: run ml_pipeline container to train and evaluate the models
+      run: sudo docker run --rm -v "$(pwd)/ml_pipeline/models:/app/models" ml_pipeline:v0
+
+    - name: Compare model accuracies
+      id: compare
+      run: |
+        # Extract r2_val from both files
+        new_r2=$(jq '.r2_val' ml_pipeline/models/best_model_metadata.json)
+        old_r2=0
+
+        if [ -f github-star-predictor/app/model/best_model_metadata.json ]; then
+          old_r2=$(jq '.r2_val' github-star-predictor/app/model/best_model_metadata.json)
+        fi
+
+        echo "New r2_val: $new_r2"
+        echo "Old r2_val: $old_r2"
+
+        if (( $(echo "$new_r2 > $old_r2" | bc -l) )); then
+          echo "Model improved. Will update model."
+          echo "should_deploy=true" >> $GITHUB_OUTPUT
+        else
+          echo "Model did not improve. Will not update."
+          echo "should_deploy=false" >> $GITHUB_OUTPUT
+        fi
+
+  updateModel:
+    needs: train
+    if: needs.train.outputs.should_deploy == 'true'
+    runs-on: self-hosted
+
+    steps:
+    - name: copy best model and scaler
+      run: |
+        cp ml_pipeline/models/best_model* github-star-predictor/app/model/
+        cp ml_pipeline/models/scaler.joblib github-star-predictor/app/model/
+  
+  build:
+    needs: updateModel
+    if: always()
+    runs-on: self-hosted
+    steps:
+    - name: build stargazer docker image
+      run: |
+        sudo docker build . -t betaloy/uu-de2-stargazer:${{github.run_number}} 
+        sudo docker build . -t betaloy/uu-de2-stargazer:latest
+      working-directory: ./github-star-predictor
+
+    - name: push stargazer image to private registry # I logged in my docker account on the self hosted runner, another way is to use a secret here
+      run: |
+        docker push betaloy/uu-de2-stargazer:${{github.run_number}}
+        docker push betaloy/uu-de2-stargazer:latest
+
+    - name: clear local stargazer image
+      run: |
+        sudo docker rmi betaloy/uu-de2-stargazer:${{github.run_number}} || true
+        sudo docker rmi betaloy/uu-de2-stargazer:latest || true
+
+  deploy:
+    needs: build
+    if: always()
+    runs-on: self-hosted
+
+    steps:
+    - name: deploy stargazer to kubernetes
+      run: kubectl apply -f stargazer-deployment.yaml
+      working-directory: ./infrastructure/k8s-workload
+    

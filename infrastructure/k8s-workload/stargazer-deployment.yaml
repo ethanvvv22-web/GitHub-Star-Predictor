@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stargazer-deployment
+  labels:
+    app: stargazer
+spec:
+  selector:
+    matchLabels:
+      app: stargazer
+  template:
+    metadata:
+      labels:
+        app: stargazer
+    spec:
+      containers:
+      - name: stargazer
+#        image: betaloy/uu-de2-stargazer:latest
+        image: stargazer:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+      imagePullSecrets:
+        - name: privateregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stargazer-service
+  labels:
+    app: stargazer
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: stargazer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stargazer-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Only if you're using HTTP
+spec:
+  ingressClassName: nginx  # Replace with your ingress class if needed
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stargazer-service
+                port:
+                  number: 5000
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: stargazer-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stargazer-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

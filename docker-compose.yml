@@ -1,0 +1,13 @@
+name: stargazer
+
+services:
+  ml_pipeline:
+    image: ml_pipeline:v0
+
+  app:
+    image: stargazer:v0
+    depends_on:
+      ml_pipeline:
+        condition: service_completed_successfully
+    ports:
+      - "5000:5000"

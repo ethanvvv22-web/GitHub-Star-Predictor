@@ -1,0 +1,131 @@
+- hosts: all
+  
+  tasks:
+
+  - name: Generate hosts file
+    lineinfile: dest=/etc/hosts
+                regexp='.*{{ item }}$'
+                line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}"
+                state=present            
+    when: hostvars[item].ansible_default_ipv4.address is defined
+    with_items: "{{groups['all']}}"
+    become: true
+     
+   #- name: Set hostname
+   #  hostname: name="{{inventory_hostname}}"
+   #  become: true
+
+  - name: apt update
+    apt: update_cache=yes
+    become: true     
+  
+  - name: Extra packages
+    apt: pkg={{item}} state=latest update_cache=true 
+    with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    become: true  
+
+  - name: Add Docker repository key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    become: true
+
+  - name: Add Docker repository 
+    command: add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    become: true
+
+  - name: Add Kubernetes repository key
+    apt_key:
+      url: https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key
+      keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    become: true
+
+  - name: Add Kubernetes repository
+    shell: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    become: true
+
+  - name: apt update2
+    apt: update_cache=yes
+    become: true
+
+  # Workaround pip issue with MTU mismatch, see: https://github.com/docker/docker.github.io/pull/9249/files
+  # MTU for SNIC is 1450, Docker default is 1500. Override so that Docker matches the host.
+  # We create the config file before installing, to avoid any need to restart the docker daemon.
+  - name: Create Ansible docker config directory.
+    become: true
+    file:
+      path: "/etc/docker"
+      state: directory
+
+  - name: Create Ansible docker file to configure Docker MTU to match SNIC for pip issue
+    become: true
+    copy:
+      dest: "/etc/docker/daemon.json"
+      content: |
+        {
+          "mtu": 1450
+        }
+
+  - name: Install Docker  
+    apt: pkg=docker-ce state=present update_cache=true allow_unauthenticated=yes
+    become: true
+
+  - name: Install kubelet kubeadm kubectl
+    apt:
+      name:
+      - kubelet=1.33.1-1.1
+      - kubeadm=1.33.1-1.1
+      - kubectl=1.33.1-1.1
+    become: true
+
+  - name: Start kubelet
+    systemd_service:
+      name: kubelet
+      state: started
+      enabled: true
+    become: true
+
+- hosts: devserver
+
+  tasks:
+  - name: Extra packages for dev server
+    apt: 
+      name:
+      - python3-pip 
+      - bash-completion
+      state: latest 
+      update_cache: true  
+    become: true
+
+  - name: Install ML packages
+    become: true
+    pip: 
+      name: numpy, pandas, scikit-learn, future, flask, joblib, xgboost
+
+- hosts: prodserver
+  tasks:
+
+  - name: setting br_netfilter for flannel CNI
+    command: modprobe br_netfilter
+    become: true
+
+  - name: download docker cri
+    get_url:
+      url: https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.17/cri-dockerd_0.3.17.3-0.ubuntu-jammy_amd64.deb
+      dest: /home/ubuntu/cri-dockerd.deb
+  
+  - name: install docker cri
+    apt:
+      deb: /home/ubuntu/cri-dockerd.deb
+    become: true
+
+  - name: Start docker cri
+    systemd_service:
+      name: cri-docker
+      state: started
+      enabled: true
+    become: true
