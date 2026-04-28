@@ -37,7 +37,7 @@ Trains and evaluates multiple models
 Selects the best model based on R² score
 Implemented in train_models.py and evaluate.py
 
-🔹 Inference Layer ⭐
+🔹 Inference Layer 
 Loads model and scaler
 Applies consistent preprocessing to inputs
 Encapsulates prediction logic for reuse
@@ -157,6 +157,7 @@ Docker
 Model files must exist in app/model/ before running
 Docker is recommended for consistent environments
 Kubernetes setup is optional
+
 ##🎯 Key Takeaways
 Demonstrates a complete ML system (not just a model)
 Separates training and inference logic
