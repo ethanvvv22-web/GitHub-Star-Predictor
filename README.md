@@ -110,6 +110,7 @@ Output:
 Ranked list based on predicted stars
 
 🏗️ Project Structure
+
 ├── app/ # Flask application (API + UI)
 │ ├── model/ # Model artifacts
 │ └── app.py
