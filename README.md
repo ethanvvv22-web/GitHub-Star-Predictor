@@ -88,8 +88,11 @@ Input:
 
 {
   "forks": 100,
+  
   "open_issues": 10
 }
+
+🌐 API Output
 
 Output:
 
@@ -97,9 +100,15 @@ Output:
   "predicted_stars": 1234
 }
 📈 Rank Repositories
+
 POST /rank
-Input: list of repositories
-Output: ranked list based on predicted stars
+
+Input:
+List of repositories
+
+Output:
+Ranked list based on predicted stars
+
 🏗️ Project Structure
 .
 ├── app/                     # Flask application (API + UI)
@@ -118,7 +127,7 @@ Output: ranked list based on predicted stars
 ├── requirements.txt
 ├── README.md
 🐳 Running with Docker
-
+docker compose up --build
 🧰 Tech Stack
 Python
 Scikit-learn / XGBoost
@@ -128,11 +137,11 @@ Docker
 📝 Notes
 Model files must exist in app/model/ before running
 Docker is recommended for consistent environments
-Kubernetes setup is optional and not required for local use
+Kubernetes setup is optional
 🎯 Key Takeaways
 Demonstrates a complete ML system (not just a model)
 Separates training and inference logic
-Uses configuration-driven design for flexibility
+Uses configuration-driven design
 Shows ability to build deployable ML applications
 ## Result
 <img width="1281" height="846" alt="image" src="https://github.com/user-attachments/assets/52b84d94-b24d-4bca-acb6-89b75738c653" />
