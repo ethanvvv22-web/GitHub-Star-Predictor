@@ -7,6 +7,7 @@ This project builds an end-to-end machine learning system to predict GitHub repo
 The system is designed with a layered architecture, covering data processing, model training, inference, and deployment.
 
 🚀 Key Features
+
 📊 End-to-end ML pipeline (preprocess → train → evaluate)
 🤖 Model selection based on validation performance (R²)
 ⚙️ Configuration-driven design (model-aware preprocessing)
