@@ -110,19 +110,18 @@ Output:
 Ranked list based on predicted stars
 
 🏗️ Project Structure
-.
-├── app/                     # Flask application (API + UI)
-│   ├── model/               # Model artifacts
-│   └── app.py
+├── app/ # Flask application (API + UI)
+│ ├── model/ # Model artifacts
+│ └── app.py
 ├── ml_pipeline/
-│   ├── src/
-│   │   ├── preprocess.py
-│   │   ├── train_models.py
-│   │   ├── evaluate.py
-│   │   ├── inference_utils.py
-│   │   ├── model_config.py
-│   │   ├── inference_test.py
-│   │   └── utils.py
+│ ├── src/
+│ │ ├── preprocess.py
+│ │ ├── train_models.py
+│ │ ├── evaluate.py
+│ │ ├── inference_utils.py
+│ │ ├── model_config.py
+│ │ ├── inference_test.py
+│ │ └── utils.py
 ├── docker-compose.yml
 ├── requirements.txt
 ├── README.md
