@@ -114,33 +114,50 @@ Ranked list based on predicted stars
 
 .
 ├── app/                     # Flask application (API + UI)
+
 │   ├── model/               # Model artifacts
+
 │   └── app.py
+
 ├── ml_pipeline/
+
 │   ├── src/
+
 │   │   ├── preprocess.py
+
 │   │   ├── train_models.py
+
 │   │   ├── evaluate.py
+
 │   │   ├── inference_utils.py
+
 │   │   ├── model_config.py
+
 │   │   ├── inference_test.py
+
 │   │   └── utils.py
+
 ├── docker-compose.yml
+
 ├── requirements.txt
+
 ├── README.md
-🐳 Running with Docker
+
+##🐳 Running with Docker
 docker compose up --build
-🧰 Tech Stack
+
+##🧰 Tech Stack
 Python
 Scikit-learn / XGBoost
 Pandas / NumPy
 Flask
 Docker
-📝 Notes
+
+##📝 Notes
 Model files must exist in app/model/ before running
 Docker is recommended for consistent environments
 Kubernetes setup is optional
-🎯 Key Takeaways
+##🎯 Key Takeaways
 Demonstrates a complete ML system (not just a model)
 Separates training and inference logic
 Uses configuration-driven design
