@@ -9,24 +9,34 @@ The system is designed with a layered architecture, covering data processing, mo
 🚀 Key Features
 
 📊 End-to-end ML pipeline (preprocess → train → evaluate)
+
 🤖 Model selection based on validation performance (R²)
+
 ⚙️ Configuration-driven design (model-aware preprocessing)
+
 🧠 Dedicated inference layer for prediction logic
+
 🌐 REST API for prediction and ranking
+
 🎨 Interactive web interface
+
 🐳 Dockerized deployment
+
 🧠 System Design
 
 The project follows a layered machine learning system architecture:
 
 Data Layer → Training Layer → Inference Layer → Application Layer
+
 🔹 Data Layer
 Handles data preprocessing and feature engineering
 Implemented in preprocess.py
+
 🔹 Training Layer
 Trains and evaluates multiple models
 Selects the best model based on R² score
 Implemented in train_models.py and evaluate.py
+
 🔹 Inference Layer ⭐
 Loads model and scaler
 Applies consistent preprocessing to inputs
@@ -35,10 +45,12 @@ Implemented in:
 inference_utils.py
 model_config.py
 inference_test.py
+
 🔹 Application Layer
 Exposes prediction services via Flask API
 Provides a simple web UI
 Implemented in app.py
+
 🧠 Machine Learning Pipeline
 
 The training workflow consists of three main steps:
@@ -49,18 +61,26 @@ python evaluate.py
 Data is cleaned and transformed
 Multiple models can be trained
 The best model is selected based on validation R² score
+
 📦 Model Artifacts
 
 After training, the following files are required for inference:
 
 app/model/
 ├── best_model.joblib
+
 ├── scaler.joblib
+
 ├── best_model_metadata.json
+
 model → performs prediction
+
 scaler → ensures consistent input preprocessing
+
 metadata → stores model information (R², model type, etc.)
+
 🌐 API Endpoints
+
 🔮 Predict Stars
 POST /predict
 
