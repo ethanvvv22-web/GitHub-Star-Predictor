@@ -96,15 +96,7 @@ Output: ranked list based on predicted stars
 ├── requirements.txt
 ├── README.md
 🐳 Running with Docker
-1️⃣ Build and start services
-docker compose up --build
-2️⃣ Access the application
 
-Open your browser:
-
-http://localhost:5000
-3️⃣ Stop services
-docker compose down
 🧰 Tech Stack
 Python
 Scikit-learn / XGBoost
